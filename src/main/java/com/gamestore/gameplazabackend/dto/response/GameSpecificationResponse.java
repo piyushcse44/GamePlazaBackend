@@ -1,9 +1,8 @@
-package com.gamestore.gameplazabackend.dto.request;
+package com.gamestore.gameplazabackend.dto.response;
 
 import com.gamestore.gameplazabackend.model.Cons;
 import com.gamestore.gameplazabackend.model.Genera;
 import com.gamestore.gameplazabackend.model.Pros;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameInfoRequest {
+public class GameSpecificationResponse {
 
     private String gameName;
     private String developerName;
@@ -28,8 +27,7 @@ public class GameInfoRequest {
     private String gameLanguage;
     private List<Genera> gameGenera;
     private BigDecimal gamePriceInInr;
-    @ApiModelProperty(value = "Feature image of the game", required = true)
-    private MultipartFile featureImage;
+    private File featureImage;
     private String gameAbout;
     private String gameDesc;
     private String gameDownloadLink;
@@ -39,5 +37,5 @@ public class GameInfoRequest {
     private Long totalDownloads;
     private BigDecimal gameRating;
     private LocalDateTime createdOn;
-
+    private List<MultipartFile> additionalImage;
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 
 
 import java.math.BigDecimal;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,9 +37,8 @@ public class GameInfo {
     private List<Genera> gameGenera;
     @Column(name="game_price_in_inr",precision = 8,scale = 2)
     private BigDecimal gamePriceInInr;
-    @Lob
     @Column(name = "feature_image")
-    private Blob featureImage;
+    private String featureImage;
     @Column(name="game_about")
     private String gameAbout;
     @Column(name="game_description",columnDefinition = "TEXT")
