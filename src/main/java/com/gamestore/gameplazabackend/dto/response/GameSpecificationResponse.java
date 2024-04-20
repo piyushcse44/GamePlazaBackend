@@ -1,7 +1,7 @@
 package com.gamestore.gameplazabackend.dto.response;
 
 import com.gamestore.gameplazabackend.model.Cons;
-import com.gamestore.gameplazabackend.model.Genera;
+import com.gamestore.gameplazabackend.model.Genre;
 import com.gamestore.gameplazabackend.model.Pros;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class GameSpecificationResponse {
     private String companyName;
     private BigDecimal gameSizeInMb;
     private String gameLanguage;
-    private List<Genera> gameGenera;
+    private List<Genre> gameGenera;
     private BigDecimal gamePriceInInr;
     private File featureImage;
     private String gameAbout;

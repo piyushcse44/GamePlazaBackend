@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class GameInfoUtil {
@@ -23,6 +24,9 @@ public class GameInfoUtil {
     private String imageDomain;
     @Value("${upload.dir}")
     private String uploadDir;
+
+    @Value("${image.endpoint}")
+    private String imageEndpoint;
 
     public  String saveImageToDir(MultipartFile file) {
 
@@ -36,13 +40,13 @@ public class GameInfoUtil {
                 String uniqueValue = LocalDateTime.now().toString();
                 uniqueValue =uniqueValue.replace(':','-');
                 uniqueValue =uniqueValue.replace('.','-');
-                String fileName = uniqueValue+file.getOriginalFilename();
+                String fileName = uniqueValue+ Objects.requireNonNull(file.getOriginalFilename()).replaceAll("\\s", "");;
 
                 Path path = Paths.get(uploadDir + fileName);
 
                 Files.write(path, bytes);
 
-                return imageDomain +"images/"+fileName;
+                return imageDomain +imageEndpoint+fileName;
             } catch (IOException e) {
                 System.out.println("Failed to upload file: " + e.getMessage());
                 return null;
@@ -53,6 +57,16 @@ public class GameInfoUtil {
 
         }
     }
+
+    public String convertUrlToPath(String url)
+    {
+        return uploadDir+url;
+    }
+
+
+
+
+
     public List<GameListResponse> changeToGameListResponse(List<GameInfo> gameInfoList)
     {
         List<GameListResponse> gameListResponseList = new ArrayList<>();

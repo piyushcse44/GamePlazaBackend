@@ -1,32 +1,33 @@
 package com.gamestore.gameplazabackend.serviceimpl;
 
 import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
+import com.gamestore.gameplazabackend.dto.request.GenreRequest;
 import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
 import com.gamestore.gameplazabackend.dto.response.GameSpecificationResponse;
 import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 import com.gamestore.gameplazabackend.model.Cons;
 import com.gamestore.gameplazabackend.model.GameInfo;
-import com.gamestore.gameplazabackend.model.Genera;
+import com.gamestore.gameplazabackend.model.Genre;
 import com.gamestore.gameplazabackend.model.Pros;
 import com.gamestore.gameplazabackend.repository.IGameInfoRepository;
 import com.gamestore.gameplazabackend.repository.IConsRepository;
 import com.gamestore.gameplazabackend.service.IGameInfoService;
-import com.gamestore.gameplazabackend.repository.IGeneraRepository;
+import com.gamestore.gameplazabackend.repository.IGenreRepository;
 import com.gamestore.gameplazabackend.repository.IProsRepository;
 import com.gamestore.gameplazabackend.util.GameInfoUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @Service
@@ -40,7 +41,7 @@ public class GameInfoServiceImpl implements IGameInfoService {
     @Autowired
     private final IConsRepository consRepository;
     @Autowired
-    private final IGeneraRepository generaRepository;
+    private final IGenreRepository generaRepository;
 
     @Autowired
     private final GameInfoUtil gameInfoUtil;
@@ -49,7 +50,7 @@ public class GameInfoServiceImpl implements IGameInfoService {
     public GameInfoServiceImpl(
             IGameInfoRepository gameInfoRepository,
             IProsRepository prosRepository, IConsRepository consRepository,
-            IGeneraRepository generaRepository,GameInfoUtil gameInfoUtil
+            IGenreRepository generaRepository, GameInfoUtil gameInfoUtil
     ) {
         this.gameInfoRepository = gameInfoRepository;
         this.prosRepository = prosRepository;
@@ -115,21 +116,83 @@ public class GameInfoServiceImpl implements IGameInfoService {
     }
 
     @Override
+    public InputStream fetchImageByUrl(String url) {
+        String path = gameInfoUtil.convertUrlToPath(url);
+        try {
+            InputStream inputStream = new FileInputStream(path);
+            System.out.println("999" + inputStream.available());
+            return inputStream;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("error in fetch image by url file not found msg:" + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException("error in fetch image by url io exception msg:" + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("error in fetch image by url exception msg:" + e.getMessage());
+        }
+    }
+
+
+    @Override
     public GameInfoResponse addGameInfo(GameInfoRequest gameInfoRequest) {
         try {
             GameInfo gameInfo = new GameInfo();
-            List<Genera> generaList = gameInfoRequest.getGameGenera();
-            if (generaList != null)
-                generaList.replaceAll(generaRepository::save);
-            List<Pros> prosList = gameInfoRequest.getProsList();
-            if (prosList != null)
-                prosList.replaceAll(prosRepository::save);
-            List<Cons> consList = gameInfoRequest.getConsList();
-            if (consList != null)
-                consList.replaceAll(consRepository::save);
+            List<Genre> genreList = new ArrayList<>();
+            if(gameInfoRequest.getGameGenreIdList()!=null)
+            {
+                for(Long genreId : gameInfoRequest.getGameGenreIdList())
+                {
+                    Genre genre = generaRepository.findById(genreId)
+                            .orElseThrow(
+                                    ()->new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            "genre with id: " + genreId
+                                            +"does not exist"
+                                    )
+                            );
+                    genreList.add(genre);
+                }
+            }
+            List<Pros> prosList = new ArrayList<>();
+            if(gameInfoRequest.getProsIdList()!=null)
+            {
+                for(Long prosId : gameInfoRequest.getProsIdList())
+                {
+                    Pros pros = prosRepository.findById(prosId)
+                            .orElseThrow(
+                                    ()->new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            "Pros with id: " + prosId
+                                                    +"does not exist"
+                                    )
+                            );
+                    prosList.add(pros);
+                }
+            }
+            prosList.replaceAll(prosRepository::save);
+            List<Cons> consList = new ArrayList<>();
+            if(gameInfoRequest.getConsIdList()!=null)
+            {
+                for(Long consId : gameInfoRequest.getConsIdList())
+                {
+                    Cons cons = consRepository.findById(consId)
+                            .orElseThrow(
+                                    ()->new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            "Cons with id: " + consId
+                                                    +"does not exist"
+                                    )
+                            );
+                    consList.add(cons);
+                }
+            }
+            consList.replaceAll(consRepository::save);
             BeanUtils.copyProperties(gameInfoRequest, gameInfo);
             gameInfo.setLastUpdatedOn(LocalDateTime.now());
+            gameInfo.setGameGenera(genreList);
+            gameInfo.setProsList(prosList);
+            gameInfo.setConsList(consList);
             gameInfo.setHoursPlayed(0);
+            gameInfo.setCreatedOn(LocalDateTime.now());
             MultipartFile featureImage = gameInfoRequest.getFeatureImage();
             String featureImagePath = gameInfoUtil.saveImageToDir(featureImage);
             gameInfo.setFeatureImage(featureImagePath);

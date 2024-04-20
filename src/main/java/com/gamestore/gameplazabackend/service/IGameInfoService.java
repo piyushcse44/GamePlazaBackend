@@ -6,6 +6,7 @@ import com.gamestore.gameplazabackend.dto.response.GameListResponse;
 import com.gamestore.gameplazabackend.dto.response.GameSpecificationResponse;
 import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface IGameInfoService
@@ -16,6 +17,7 @@ public interface IGameInfoService
     public GameListResponse fetchGameListById(Long id);
     public GameSpecificationResponse fetchGameSpecificationById(Long id);
     public GamingLibraryResponse fetchGamingLibraryById(Long id);
+    public InputStream fetchImageByUrl(String url);
     public GameInfoResponse addGameInfo(GameInfoRequest gameInfoRequest);
     public GameInfoResponse updateGameInfo(Long id,GameInfoRequest gameInfoRequest);
     public String deleteGameInfoById(Long id);

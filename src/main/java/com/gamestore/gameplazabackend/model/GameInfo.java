@@ -34,7 +34,7 @@ public class GameInfo {
     private String gameLanguage;
     @Column(name = "game_genera")
     @ManyToMany
-    private List<Genera> gameGenera;
+    private List<Genre> gameGenera;
     @Column(name="game_price_in_inr",precision = 8,scale = 2)
     private BigDecimal gamePriceInInr;
     @Column(name = "feature_image")
