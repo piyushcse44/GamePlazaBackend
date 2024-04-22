@@ -18,7 +18,7 @@ public class GameListResponse {
     private Long gameId;
     private String gameName;
     private String companyName;
-    private BigDecimal rating;
-    private String downloads;
+    private BigDecimal gameRating;
+    private String totalDownloads;
     private String featureImage;
 }

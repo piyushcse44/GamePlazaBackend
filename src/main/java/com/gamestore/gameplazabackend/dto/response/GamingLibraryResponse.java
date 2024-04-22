@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,10 +19,7 @@ public class GamingLibraryResponse {
     private Long gameId;
     private String gameName;
     private String companyName;
-    private MultipartFile featureImage;
-    private LocalDateTime dateAdded ;
-    private Boolean isDownloaded;
-
-
-
+    private String featureImage;
+    private LocalDate dateAdded;
+    private Integer hoursPlayed;
 }

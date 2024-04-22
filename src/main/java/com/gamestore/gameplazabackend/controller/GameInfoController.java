@@ -3,6 +3,7 @@ package com.gamestore.gameplazabackend.controller;
 import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
 import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
+import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 import com.gamestore.gameplazabackend.service.IGameInfoService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +40,11 @@ public class GameInfoController {
         return gameInfoService.fetchAllGameList();
     }
 
+    @GetMapping(path = "/gaming_library")
+    public List<GamingLibraryResponse> getAllGamingLibrary()
+    {
+        return  gameInfoService.fetchAllGamingLibrary();
+    }
     @PostMapping(path = "/game_info")
     public GameInfoResponse addGameInfo(@ModelAttribute GameInfoRequest gameInfoRequest)
     {

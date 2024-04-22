@@ -81,7 +81,16 @@ public class GameInfoServiceImpl implements IGameInfoService {
 
     @Override
     public List<GamingLibraryResponse> fetchAllGamingLibrary() {
-        return null;
+        try {
+            List<GameInfo> gameInfoList = gameInfoRepository
+                    .findAll();
+            return gameInfoUtil.changeToGameLibraryResponse(gameInfoList);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("error occurs in fetch all game library " +
+                    "error :"+e.getMessage());
+        }
     }
 
     @Override

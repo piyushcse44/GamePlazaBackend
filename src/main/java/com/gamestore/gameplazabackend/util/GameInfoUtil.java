@@ -1,6 +1,7 @@
 package com.gamestore.gameplazabackend.util;
 
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
+import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 import com.gamestore.gameplazabackend.model.GameInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,6 +78,19 @@ public class GameInfoUtil {
             gameListResponseList.add(gameListResponse);
         }
         return gameListResponseList;
+    }
+
+    public List<GamingLibraryResponse> changeToGameLibraryResponse(List<GameInfo> gameInfoList)
+    {
+        List<GamingLibraryResponse> gamingLibraryResponses = new ArrayList<>();
+        for(GameInfo gameInfo : gameInfoList)
+        {
+            GamingLibraryResponse gamingLibraryResponse = new GamingLibraryResponse();
+            BeanUtils.copyProperties(gameInfo,gamingLibraryResponse);
+            gamingLibraryResponse.setDateAdded(gameInfo.getCreatedOn().toLocalDate());
+            gamingLibraryResponses.add(gamingLibraryResponse);
+        }
+        return gamingLibraryResponses;
     }
 
 }
