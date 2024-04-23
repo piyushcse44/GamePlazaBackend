@@ -1,10 +1,7 @@
 package com.gamestore.gameplazabackend.serviceimpl;
 
 import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
-import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
-import com.gamestore.gameplazabackend.dto.response.GameListResponse;
-import com.gamestore.gameplazabackend.dto.response.GameSpecificationResponse;
-import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
+import com.gamestore.gameplazabackend.dto.response.*;
 import com.gamestore.gameplazabackend.model.Cons;
 import com.gamestore.gameplazabackend.model.GameInfo;
 import com.gamestore.gameplazabackend.model.Genre;
@@ -63,7 +60,7 @@ public class GameInfoServiceImpl implements IGameInfoService {
     }
 
     @Override
-    public List<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber) {
+    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber) {
         try {
             if (pageSize <= 0 || pageNumber < 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid pageSize or pageNumber");
@@ -73,7 +70,16 @@ public class GameInfoServiceImpl implements IGameInfoService {
             Pageable p = PageRequest.of(pageNumber, pageSize);
             Page<GameInfo> page = gameInfoRepository.findAll(p);
 
-            return gameInfoUtil.changeToGameListResponse(page.getContent());
+            List<GameListResponse>  gameListResponseList = gameInfoUtil.changeToGameListResponse(page.getContent());
+            return  new PagingResponse<GameListResponse>(
+                    gameListResponseList,
+                    page.getNumber(),
+                    page.getSize(),
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.isLast()
+            );
+
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid input parameters: " + e.getMessage());
         } catch (Exception e) {

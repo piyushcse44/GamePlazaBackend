@@ -4,20 +4,11 @@ import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
 import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
 import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
+import com.gamestore.gameplazabackend.dto.response.PagingResponse;
 import com.gamestore.gameplazabackend.service.IGameInfoService;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @CrossOrigin
@@ -35,7 +26,7 @@ public class GameInfoController {
 
 
     @GetMapping(path ="/game_list")
-    public List<GameListResponse> getPageOfGameList(
+    public PagingResponse<GameListResponse> getPageOfGameList(
             @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
             @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber
     )
