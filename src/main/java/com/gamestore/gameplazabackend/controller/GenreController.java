@@ -15,12 +15,12 @@ public class GenreController {
 
     @Autowired
     private IGenreService genreService;
-    @GetMapping(path = "/")
+    @GetMapping(path = "")
     public List<Genre> getAllGenreInfo()
     {
         return genreService.getAllGenre();
     }
-    @PostMapping(path = "/")
+    @PostMapping(path = "")
     public Genre addGenreInfo(@RequestBody GenreRequest genreRequest)
     {
         return genreService.addGenre(genreRequest);

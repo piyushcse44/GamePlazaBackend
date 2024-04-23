@@ -16,12 +16,12 @@ public class ProsController {
 
     @Autowired
     private IProsService prosService;
-    @GetMapping(path = "/")
+    @GetMapping(path = "")
     public List<Pros> getAllProsInfo()
     {
         return prosService.getAllPros();
     }
-    @PostMapping(path = "/")
+    @PostMapping(path = "")
     public Pros addProsInfo(@RequestBody ProsRequest prosRequest)
     {
         return prosService.addPros(prosRequest);

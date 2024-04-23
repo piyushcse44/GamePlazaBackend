@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface IGameInfoService
 {
-    public List<GameListResponse> fetchAllGameList();
+    public List<GameListResponse> getPageOfGameList(Integer pageSize,Integer pageNumber);
     public List<GameSpecificationResponse> fetchAllGameSpecification();
     public List<GamingLibraryResponse> fetchAllGamingLibrary();
     public GameListResponse fetchGameListById(Long id);

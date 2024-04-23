@@ -35,13 +35,16 @@ public class GameInfoController {
 
 
     @GetMapping(path ="/game_list")
-    public List<GameListResponse> getAllGameList()
+    public List<GameListResponse> getPageOfGameList(
+            @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
+            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber
+    )
     {
-        return gameInfoService.fetchAllGameList();
+        return gameInfoService.getPageOfGameList(pageSize,pageNumber-1);
     }
 
     @GetMapping(path = "/gaming_library")
-    public List<GamingLibraryResponse> getAllGamingLibrary()
+    public List<GamingLibraryResponse> getGamingLibraryByPageS()
     {
         return  gameInfoService.fetchAllGamingLibrary();
     }

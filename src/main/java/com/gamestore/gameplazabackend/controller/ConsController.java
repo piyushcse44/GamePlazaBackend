@@ -16,12 +16,12 @@ public class ConsController {
 
     @Autowired
     private IConsService consService;
-    @GetMapping(path = "/")
+    @GetMapping(path = "")
     public List<Cons> getAllConsInfo()
     {
         return consService.getAllCons();
     }
-    @PostMapping(path = "/")
+    @PostMapping(path = "")
     public Cons addConsInfo(@RequestBody ConsRequest consRequest)
     {
         return consService.addCons(consRequest);

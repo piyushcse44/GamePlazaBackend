@@ -1,5 +1,6 @@
 package com.gamestore.gameplazabackend.util;
 
+import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
 import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 import com.gamestore.gameplazabackend.model.GameInfo;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class GameInfoUtil {
@@ -70,14 +72,14 @@ public class GameInfoUtil {
 
     public List<GameListResponse> changeToGameListResponse(List<GameInfo> gameInfoList)
     {
-        List<GameListResponse> gameListResponseList = new ArrayList<>();
-        for(GameInfo gameInfo : gameInfoList)
-        {
-            GameListResponse gameListResponse = new GameListResponse();
-            BeanUtils.copyProperties(gameInfo,gameListResponse);
-            gameListResponseList.add(gameListResponse);
-        }
-        return gameListResponseList;
+       return gameInfoList.stream()
+               .map(
+                       (gameInfo -> {
+                           GameListResponse gameListResponse = new GameListResponse();
+                           BeanUtils.copyProperties(gameInfo,gameListResponse);
+                           return gameListResponse;
+                       })
+               ).collect(Collectors.toList());
     }
 
     public List<GamingLibraryResponse> changeToGameLibraryResponse(List<GameInfo> gameInfoList)

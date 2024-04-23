@@ -1,7 +1,6 @@
 package com.gamestore.gameplazabackend.serviceimpl;
 
 import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
-import com.gamestore.gameplazabackend.dto.request.GenreRequest;
 import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
 import com.gamestore.gameplazabackend.dto.response.GameSpecificationResponse;
@@ -18,11 +17,15 @@ import com.gamestore.gameplazabackend.repository.IProsRepository;
 import com.gamestore.gameplazabackend.util.GameInfoUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -60,19 +63,24 @@ public class GameInfoServiceImpl implements IGameInfoService {
     }
 
     @Override
-    public List<GameListResponse> fetchAllGameList() {
+    public List<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber) {
         try {
-            List<GameInfo> gameInfoList = gameInfoRepository
-                    .findAll();
-            return gameInfoUtil.changeToGameListResponse(gameInfoList);
-        }
-        catch(Exception e)
-            {
-                throw new RuntimeException("error occurs in fetch all game list " +
-                        "error :"+e.getMessage());
+            if (pageSize <= 0 || pageNumber < 0) {
+                throw new IllegalArgumentException("Invalid pageSize or pageNumber");
             }
 
+            //paging
+            Pageable p = PageRequest.of(pageNumber, pageSize);
+            Page<GameInfo> page = gameInfoRepository.findAll(p);
+
+            return gameInfoUtil.changeToGameListResponse(page.getContent());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid input parameters: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while fetching game list: " + e.getMessage(), e);
+        }
     }
+
 
     @Override
     public List<GameSpecificationResponse> fetchAllGameSpecification() {
