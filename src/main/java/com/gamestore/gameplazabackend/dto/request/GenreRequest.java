@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenreRequest {
-    private String generaType;
-    private String generaSpec;
+    private String genreType;
+    private String genreSpec;
 }
 
 

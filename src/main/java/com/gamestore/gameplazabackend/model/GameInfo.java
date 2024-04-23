@@ -32,7 +32,7 @@ public class GameInfo {
     private BigDecimal gameSizeInMb;
     @Column(name="game_language")
     private String gameLanguage;
-    @Column(name = "game_genera")
+    @Column(name = "game_genre")
     @ManyToMany
     private List<Genre> gameGenera;
     @Column(name="game_price_in_inr",precision = 8,scale = 2)

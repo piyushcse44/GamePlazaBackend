@@ -66,7 +66,7 @@ public class GameInfoServiceImpl implements IGameInfoService {
     public List<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber) {
         try {
             if (pageSize <= 0 || pageNumber < 0) {
-                throw new IllegalArgumentException("Invalid pageSize or pageNumber");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid pageSize or pageNumber");
             }
 
             //paging

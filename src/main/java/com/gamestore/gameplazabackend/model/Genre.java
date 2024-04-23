@@ -16,10 +16,10 @@ public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id ;
-    @Column(name = "genera_type")
-    private String generaType;
-    @Column(name = "genera_spec",columnDefinition = "TEXT")
-    private String generaSpec;
+    @Column(name = "genre_type")
+    private String genreType;
+    @Column(name = "genre_spec",columnDefinition = "TEXT")
+    private String genreSpec;
 
 
 }

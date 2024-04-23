@@ -40,8 +40,8 @@ public class GenreServiceImpl implements IGenreService {
 
     @Override
     public Genre addGenre(GenreRequest genreRequest) {
-        if(genreRequest == null || genreRequest.getGeneraType()==null
-                || genreRequest.getGeneraType().trim().isEmpty()
+        if(genreRequest == null || genreRequest.getGenreType()==null
+                || genreRequest.getGenreSpec().trim().isEmpty()
         )
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
