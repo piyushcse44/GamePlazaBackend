@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,14 +61,14 @@ public class GameInfoServiceImpl implements IGameInfoService {
     }
 
     @Override
-    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber) {
+    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber,String sortBy) {
         try {
             if (pageSize <= 0 || pageNumber < 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid pageSize or pageNumber");
             }
 
             //paging
-            Pageable p = PageRequest.of(pageNumber, pageSize);
+            Pageable p = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).descending());
             Page<GameInfo> page = gameInfoRepository.findAll(p);
 
             List<GameListResponse>  gameListResponseList = gameInfoUtil.changeToGameListResponse(page.getContent());
@@ -79,11 +80,33 @@ public class GameInfoServiceImpl implements IGameInfoService {
                     page.getTotalPages(),
                     page.isLast()
             );
-
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid input parameters: " + e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException("Error occurred while fetching game list: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(String searchedWord, Integer pageSize, Integer pageNumber, String sortBy) {
+        try {
+            if (pageSize <= 0 || pageNumber < 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid pageSize or pageNumber");
+            }
+
+            //paging
+            Pageable p = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).descending());
+            Page<GameInfo> page = gameInfoRepository.searchByNameAndCompanyName(searchedWord,p);
+
+            List<GameListResponse>  gameListResponseList = gameInfoUtil.changeToGameListResponse(page.getContent());
+            return  new PagingResponse<GameListResponse>(
+                    gameListResponseList,
+                    page.getNumber(),
+                    page.getSize(),
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.isLast()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while searching game list by gameName and Company Name msg: " + e.getMessage(), e);
         }
     }
 

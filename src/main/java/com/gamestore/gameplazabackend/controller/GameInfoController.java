@@ -28,10 +28,22 @@ public class GameInfoController {
     @GetMapping(path ="/game_list")
     public PagingResponse<GameListResponse> getPageOfGameList(
             @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
-            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber
+            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber,
+            @RequestParam(value = "sortBy",defaultValue = "gameRating",required = false) String sortBy
     )
     {
-        return gameInfoService.getPageOfGameList(pageSize,pageNumber-1);
+        return gameInfoService.getPageOfGameList(pageSize,pageNumber-1,sortBy);
+    }
+
+    @GetMapping(path = "/search/game_list")
+    public PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(
+            @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
+            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber,
+            @RequestParam(value = "sortBy",defaultValue = "gameRating",required = false) String sortBy,
+            @RequestParam(value ="searchedWord",defaultValue = "",required = false) String searchedWord
+    )
+    {
+        return gameInfoService.searchGameListByGameAndCompanyName(searchedWord,pageSize,pageNumber,sortBy);
     }
 
     @GetMapping(path = "/gaming_library")

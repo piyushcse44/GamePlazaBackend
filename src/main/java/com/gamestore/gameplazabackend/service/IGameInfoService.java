@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface IGameInfoService
 {
-    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber);
+    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber,String sortBy);
+    public PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(String searchedWord,Integer pageSize, Integer pageNumber,String sortBy);
     public List<GameSpecificationResponse> fetchAllGameSpecification();
     public List<GamingLibraryResponse> fetchAllGamingLibrary();
     public GameListResponse fetchGameListById(Long id);
