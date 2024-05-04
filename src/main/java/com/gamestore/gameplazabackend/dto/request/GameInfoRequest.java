@@ -37,6 +37,7 @@ public class GameInfoRequest {
     private String gameDevice;
     private Long totalDownloads;
     private BigDecimal gameRating;
+    private List<MultipartFile> additionalImages;
 
 
 }

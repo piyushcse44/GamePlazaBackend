@@ -2,9 +2,14 @@ package com.gamestore.gameplazabackend.util;
 
 import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
 import com.gamestore.gameplazabackend.dto.response.GameListResponse;
+import com.gamestore.gameplazabackend.dto.response.GameSpecificationResponse;
 import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
 import com.gamestore.gameplazabackend.model.GameInfo;
+import com.gamestore.gameplazabackend.model.Genre;
+import com.gamestore.gameplazabackend.service.IGameInfoService;
+import com.gamestore.gameplazabackend.serviceimpl.GameInfoServiceImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,10 +23,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
 public class GameInfoUtil {
+
+
 
     @Value("${image.domain}")
     private String imageDomain;
@@ -94,5 +102,17 @@ public class GameInfoUtil {
         }
         return gamingLibraryResponses;
     }
+
+    public GameSpecificationResponse convertToGameSpec(GameInfo gameInfo)
+    {
+        GameSpecificationResponse gameSpecificationResponse = new GameSpecificationResponse();
+        BeanUtils.copyProperties(gameInfo,gameSpecificationResponse);
+        return gameSpecificationResponse;
+    }
+
+
+
+
+
 
 }

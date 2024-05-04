@@ -35,4 +35,5 @@ public class GameInfoResponse {
     private BigDecimal gameRating;
     private LocalDateTime createdOn;
     private Integer hoursPlayed;
+    private List<String> additionalImage;
 }

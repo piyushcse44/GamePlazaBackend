@@ -37,5 +37,5 @@ public class GameSpecificationResponse {
     private Long totalDownloads;
     private BigDecimal gameRating;
     private LocalDateTime createdOn;
-    private List<MultipartFile> additionalImage;
+    private List<String> additionalImage;
 }

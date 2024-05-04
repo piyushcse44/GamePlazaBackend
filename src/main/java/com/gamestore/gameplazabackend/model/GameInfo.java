@@ -63,4 +63,8 @@ public class GameInfo {
     private LocalDateTime lastUpdatedOn;
     @Column(name = "hours_played")
     private Integer hoursPlayed;
+    @ElementCollection
+    @CollectionTable(name = "game_additional_image",
+                      joinColumns = @JoinColumn(name = "game_id"))
+    private List<String> additionalImage;
 }

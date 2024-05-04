@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface IGameInfoService
 {
-    public PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber,String sortBy);
-    public PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(String searchedWord,Integer pageSize, Integer pageNumber,String sortBy);
-    public List<GameSpecificationResponse> fetchAllGameSpecification();
-    public List<GamingLibraryResponse> fetchAllGamingLibrary();
-    public GameListResponse fetchGameListById(Long id);
-    public GameSpecificationResponse fetchGameSpecificationById(Long id);
-    public GamingLibraryResponse fetchGamingLibraryById(Long id);
-    public InputStream fetchImageByUrl(String url);
-    public GameInfoResponse addGameInfo(GameInfoRequest gameInfoRequest);
-    public GameInfoResponse updateGameInfo(Long id,GameInfoRequest gameInfoRequest);
-    public String deleteGameInfoById(Long id);
+    PagingResponse<GameListResponse> getPageOfGameList(Integer pageSize, Integer pageNumber, String sortBy);
+    PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(String searchedWord, Integer pageSize, Integer pageNumber, String sortBy);
+    List<GameSpecificationResponse> fetchAllGameSpecification();
+    List<GamingLibraryResponse> fetchAllGamingLibrary();
+    GameListResponse fetchGameListById(Long id);
+    GameSpecificationResponse fetchGameSpecificationById(Long id);
+    GamingLibraryResponse fetchGamingLibraryById(Long id);
+    InputStream fetchImageByUrl(String url);
+    GameInfoResponse addGameInfo(GameInfoRequest gameInfoRequest);
+    GameInfoResponse updateGameInfo(Long id,GameInfoRequest gameInfoRequest);
+    String deleteGameInfoById(Long id);
 
 }

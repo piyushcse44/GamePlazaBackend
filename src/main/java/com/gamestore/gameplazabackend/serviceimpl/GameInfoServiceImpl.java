@@ -7,10 +7,10 @@ import com.gamestore.gameplazabackend.model.GameInfo;
 import com.gamestore.gameplazabackend.model.Genre;
 import com.gamestore.gameplazabackend.model.Pros;
 import com.gamestore.gameplazabackend.repository.IGameInfoRepository;
-import com.gamestore.gameplazabackend.repository.IConsRepository;
+import com.gamestore.gameplazabackend.service.IConsService;
 import com.gamestore.gameplazabackend.service.IGameInfoService;
-import com.gamestore.gameplazabackend.repository.IGenreRepository;
-import com.gamestore.gameplazabackend.repository.IProsRepository;
+import com.gamestore.gameplazabackend.service.IGenreService;
+import com.gamestore.gameplazabackend.service.IProsService;
 import com.gamestore.gameplazabackend.util.GameInfoUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +38,11 @@ public class GameInfoServiceImpl implements IGameInfoService {
     @Autowired
     private final IGameInfoRepository gameInfoRepository;
     @Autowired
-    private final IProsRepository prosRepository;
+    private final IProsService prosService;
     @Autowired
-    private final IConsRepository consRepository;
+    private final IConsService consService;
     @Autowired
-    private final IGenreRepository generaRepository;
+    private final IGenreService genreService;
 
     @Autowired
     private final GameInfoUtil gameInfoUtil;
@@ -50,13 +50,13 @@ public class GameInfoServiceImpl implements IGameInfoService {
 
     public GameInfoServiceImpl(
             IGameInfoRepository gameInfoRepository,
-            IProsRepository prosRepository, IConsRepository consRepository,
-            IGenreRepository generaRepository, GameInfoUtil gameInfoUtil
+            IProsService prosService, IConsService consService,
+            IGenreService genreService, GameInfoUtil gameInfoUtil
     ) {
         this.gameInfoRepository = gameInfoRepository;
-        this.prosRepository = prosRepository;
-        this.consRepository = consRepository;
-        this.generaRepository = generaRepository;
+        this.prosService = prosService;
+        this.consService = consService;
+        this.genreService = genreService;
         this.gameInfoUtil = gameInfoUtil;
     }
 
@@ -72,9 +72,9 @@ public class GameInfoServiceImpl implements IGameInfoService {
             Page<GameInfo> page = gameInfoRepository.findAll(p);
 
             List<GameListResponse>  gameListResponseList = gameInfoUtil.changeToGameListResponse(page.getContent());
-            return  new PagingResponse<GameListResponse>(
+            return  new PagingResponse<>(
                     gameListResponseList,
-                    page.getNumber(),
+                    page.getNumber()+1,
                     page.getSize(),
                     page.getTotalElements(),
                     page.getTotalPages(),
@@ -97,9 +97,9 @@ public class GameInfoServiceImpl implements IGameInfoService {
             Page<GameInfo> page = gameInfoRepository.searchByNameAndCompanyName(searchedWord,p);
 
             List<GameListResponse>  gameListResponseList = gameInfoUtil.changeToGameListResponse(page.getContent());
-            return  new PagingResponse<GameListResponse>(
+            return  new PagingResponse<>(
                     gameListResponseList,
-                    page.getNumber(),
+                    page.getNumber()+1,
                     page.getSize(),
                     page.getTotalElements(),
                     page.getTotalPages(),
@@ -153,7 +153,14 @@ public class GameInfoServiceImpl implements IGameInfoService {
 
     @Override
     public GameSpecificationResponse fetchGameSpecificationById(Long id) {
-        return null;
+        GameInfo gameInfo = gameInfoRepository.findById(id).orElseThrow(
+                ()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "gameInfo with id:"+id+" does not exists"
+                )
+        );
+        return gameInfoUtil.convertToGameSpec(gameInfo);
+
     }
 
     @Override
@@ -182,71 +189,71 @@ public class GameInfoServiceImpl implements IGameInfoService {
     public GameInfoResponse addGameInfo(GameInfoRequest gameInfoRequest) {
         try {
             GameInfo gameInfo = new GameInfo();
+            BeanUtils.copyProperties(gameInfoRequest, gameInfo);
+            gameInfo.setLastUpdatedOn(LocalDateTime.now());
+
             List<Genre> genreList = new ArrayList<>();
             if(gameInfoRequest.getGameGenreIdList()!=null)
             {
                 for(Long genreId : gameInfoRequest.getGameGenreIdList())
                 {
-                    Genre genre = generaRepository.findById(genreId)
-                            .orElseThrow(
-                                    ()->new ResponseStatusException(
-                                            HttpStatus.NOT_FOUND,
-                                            "genre with id: " + genreId
-                                            +"does not exist"
-                                    )
-                            );
+                    Genre genre = genreService.getGenreById(genreId);
                     genreList.add(genre);
                 }
             }
+            gameInfo.setGameGenera(genreList);
+
+
             List<Pros> prosList = new ArrayList<>();
             if(gameInfoRequest.getProsIdList()!=null)
             {
                 for(Long prosId : gameInfoRequest.getProsIdList())
                 {
-                    Pros pros = prosRepository.findById(prosId)
-                            .orElseThrow(
-                                    ()->new ResponseStatusException(
-                                            HttpStatus.NOT_FOUND,
-                                            "Pros with id: " + prosId
-                                                    +"does not exist"
-                                    )
-                            );
+                    Pros pros = prosService.getProsById(prosId);
                     prosList.add(pros);
                 }
             }
-            prosList.replaceAll(prosRepository::save);
+            gameInfo.setProsList(prosList);
+
+
             List<Cons> consList = new ArrayList<>();
             if(gameInfoRequest.getConsIdList()!=null)
             {
                 for(Long consId : gameInfoRequest.getConsIdList())
                 {
-                    Cons cons = consRepository.findById(consId)
-                            .orElseThrow(
-                                    ()->new ResponseStatusException(
-                                            HttpStatus.NOT_FOUND,
-                                            "Cons with id: " + consId
-                                                    +"does not exist"
-                                    )
-                            );
+                    Cons cons = consService.getConsById(consId);
                     consList.add(cons);
                 }
             }
-            consList.replaceAll(consRepository::save);
-            BeanUtils.copyProperties(gameInfoRequest, gameInfo);
-            gameInfo.setLastUpdatedOn(LocalDateTime.now());
-            gameInfo.setGameGenera(genreList);
-            gameInfo.setProsList(prosList);
             gameInfo.setConsList(consList);
+
+
             gameInfo.setHoursPlayed(0);
             gameInfo.setCreatedOn(LocalDateTime.now());
+
             MultipartFile featureImage = gameInfoRequest.getFeatureImage();
             String featureImagePath = gameInfoUtil.saveImageToDir(featureImage);
             gameInfo.setFeatureImage(featureImagePath);
+
+            List<String> additionalImagesPath = new ArrayList<>();
+            List<MultipartFile> additionalImages = gameInfoRequest.getAdditionalImages();
+            for(MultipartFile singleImage : additionalImages)
+            {
+                additionalImagesPath.add(gameInfoUtil.saveImageToDir(singleImage));
+            }
+            gameInfo.setAdditionalImage(additionalImagesPath);
+
+
             gameInfo = gameInfoRepository.save(gameInfo);
             GameInfoResponse gameInfoResponse = new GameInfoResponse();
             BeanUtils.copyProperties(gameInfo, gameInfoResponse);
             return gameInfoResponse;
-        } catch (Exception e) {
+        }
+        catch (NullPointerException e)
+        {
+            return null;
+        }
+        catch (Exception e) {
             throw new RuntimeException("Error occurs in addGameInfo serviceImpl error: "
                     + e.getMessage());
         }

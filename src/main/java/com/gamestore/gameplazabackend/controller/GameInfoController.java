@@ -1,10 +1,8 @@
 package com.gamestore.gameplazabackend.controller;
 
+import com.gamestore.gameplazabackend.config.AppConstants;
 import com.gamestore.gameplazabackend.dto.request.GameInfoRequest;
-import com.gamestore.gameplazabackend.dto.response.GameInfoResponse;
-import com.gamestore.gameplazabackend.dto.response.GameListResponse;
-import com.gamestore.gameplazabackend.dto.response.GamingLibraryResponse;
-import com.gamestore.gameplazabackend.dto.response.PagingResponse;
+import com.gamestore.gameplazabackend.dto.response.*;
 import com.gamestore.gameplazabackend.service.IGameInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +25,9 @@ public class GameInfoController {
 
     @GetMapping(path ="/game_list")
     public PagingResponse<GameListResponse> getPageOfGameList(
-            @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
-            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber,
-            @RequestParam(value = "sortBy",defaultValue = "gameRating",required = false) String sortBy
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(value = "pageNumber",defaultValue =AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY,required = false) String sortBy
     )
     {
         return gameInfoService.getPageOfGameList(pageSize,pageNumber-1,sortBy);
@@ -37,13 +35,19 @@ public class GameInfoController {
 
     @GetMapping(path = "/search/game_list")
     public PagingResponse<GameListResponse> searchGameListByGameAndCompanyName(
-            @RequestParam(value = "pageSize",defaultValue ="8",required = false) Integer pageSize,
-            @RequestParam(value = "pageNumber",defaultValue ="1",required = false) Integer pageNumber,
-            @RequestParam(value = "sortBy",defaultValue = "gameRating",required = false) String sortBy,
-            @RequestParam(value ="searchedWord",defaultValue = "",required = false) String searchedWord
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(value = "pageNumber",defaultValue =AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY,required = false) String sortBy,
+            @RequestParam(value ="searchedWord",defaultValue = AppConstants.SEARCHED_WORD,required = false) String searchedWord
     )
     {
-        return gameInfoService.searchGameListByGameAndCompanyName(searchedWord,pageSize,pageNumber,sortBy);
+        return gameInfoService.searchGameListByGameAndCompanyName(searchedWord,pageSize,pageNumber-1,sortBy);
+    }
+
+    @GetMapping(path = "/game_spec/{id}")
+    public GameSpecificationResponse fetchGameSpecificationById(@PathVariable Long id)
+    {
+        return gameInfoService.fetchGameSpecificationById(id);
     }
 
     @GetMapping(path = "/gaming_library")

@@ -6,8 +6,8 @@ import com.gamestore.gameplazabackend.model.Genre;
 import java.util.List;
 
 public interface IGenreService {
-    public List<Genre> getAllGenre();
-    public  Genre getGenreById(Long id);
-    public Genre addGenre(GenreRequest genreRequest);
-    public String deleteGenreById(Long id);
+    List<Genre> getAllGenre();
+    Genre getGenreById(Long id);
+    Genre addGenre(GenreRequest genreRequest);
+    String deleteGenreById(Long id);
 }

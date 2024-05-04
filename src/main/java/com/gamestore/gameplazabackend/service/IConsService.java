@@ -6,8 +6,8 @@ import com.gamestore.gameplazabackend.model.Cons;
 import java.util.List;
 
 public interface IConsService {
-    public List<Cons> getAllCons();
-    public  Cons getConsById(Long id);
-    public Cons addCons(ConsRequest consRequest);
-    public String deleteConsById(Long id);
+    List<Cons> getAllCons();
+    Cons getConsById(Long id);
+    Cons addCons(ConsRequest consRequest);
+    String deleteConsById(Long id);
 }
