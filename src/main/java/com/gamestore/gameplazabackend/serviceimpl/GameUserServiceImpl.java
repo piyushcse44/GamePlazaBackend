@@ -8,12 +8,9 @@ import com.gamestore.gameplazabackend.model.GameUser;
 import com.gamestore.gameplazabackend.repository.IGameUserRepository;
 import com.gamestore.gameplazabackend.service.IGameUserService;
 import com.gamestore.gameplazabackend.service.IUserTokenService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -79,6 +76,18 @@ public class GameUserServiceImpl implements IGameUserService {
 
     @Override
     public String register(RegisterRequest request) {
+        Optional<GameUser> gameUser;
+        try{
+             gameUser = gameUserRepository.findByUserEmail(request.getEmail());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error in register service msg:"+e.getMessage());
+        }
+        if(gameUser.isPresent()) throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "An User with Email id:"+request.getEmail()+" already Exists."
+        );
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = GameUser.builder()
                 .userName(request.getName())
@@ -105,7 +114,7 @@ public class GameUserServiceImpl implements IGameUserService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = loadUserByUsername(request.getEmail());
             String token = this.helper.generateToken(userDetails);
-
+            userTokenService.saveUserToken(request.getEmail(),token);
             return AuthenticationResponse.builder()
                     .jwtToken(token)
                     .userName(userDetails.getUsername()).build();

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -18,11 +20,13 @@ public class UserToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private GameUser user;
+    @Column(name = "user_name")
+    private String email;
 
     @Column(name = "token")
     private String token;
+
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
 
 }

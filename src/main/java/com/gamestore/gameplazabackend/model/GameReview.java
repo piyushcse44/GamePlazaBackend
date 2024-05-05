@@ -19,6 +19,7 @@ public class GameReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_review_id")
     private Long gameReviewId;
+
     @ManyToOne
     private GameInfo gameInfo;
     @Column(name = "review_rating",precision = 2,scale = 1)
