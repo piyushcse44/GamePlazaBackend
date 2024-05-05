@@ -51,9 +51,7 @@ public class GameUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return this.roles.
-                stream().map((role)->new SimpleGrantedAuthority(role.getRoleName())).
-                toList();
+        return  null;
     }
 
     @Override
