@@ -41,14 +41,15 @@ import java.util.Map;
 //                        description = "DEVELOPMENT ENV",
 //                        url = "http://15.207.221.112:8082"
 //                ),
+
+                @Server(
+                        description = "PROD ENV",
+                        url = "https://gameplazabackend.onrender.com"
+                ),
                 @Server(
                         description = "Local ENV",
                         url = "http://localhost:8082"
                 )
-//                @Server(
-//                        description = "PROD ENV",
-//                        url = "http://52.66.118.93:8092"
-//                )
         },
         security = {
                 @SecurityRequirement(
