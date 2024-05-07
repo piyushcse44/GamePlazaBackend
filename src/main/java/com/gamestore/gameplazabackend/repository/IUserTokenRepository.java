@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface IUserTokenRepository extends JpaRepository<UserToken,Long> {
-    @Query("SELECT u FROM UserToken u WHERE u.email = :userEmail")
-    List<UserToken> findByUserEmail(String userEmail);
+    @Query("SELECT u FROM UserToken u WHERE u.email = :email")
+    List<UserToken> findByEmail(String email);
 }

@@ -4,7 +4,6 @@ import com.gamestore.gameplazabackend.dto.request.ProsRequest;
 import com.gamestore.gameplazabackend.model.Pros;
 import com.gamestore.gameplazabackend.service.IProsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -16,20 +16,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(name ="game_user")
 public class GameUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id",nullable = false, unique = true)
-    private Long userId;
+    private Long Id;
 
-    @Column(name = "user_name")
-    private String userName;
-    @Column(name = "user_email")
-    private String userEmail;
-    @Column(name = "user_password")
-    private String userPassword;
+
+    private String name;
+    private String email;
+    private String password;
     @Column(name = "is_account_non_expired")
     private Boolean isAccountNonExpired;
     @Column(name = "is_account_non_locked")
@@ -56,12 +55,12 @@ public class GameUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.userPassword;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.userEmail;
+        return this.email;
     }
 
     @Override

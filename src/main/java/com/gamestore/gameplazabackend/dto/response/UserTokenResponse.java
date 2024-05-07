@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Setter
@@ -16,6 +14,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class UserTokenResponse {
     private String token;
-    private LocalDate createdDate;
-    private LocalTime createdTime;
+    private String createdDate;
+    private String createdTime;
 }

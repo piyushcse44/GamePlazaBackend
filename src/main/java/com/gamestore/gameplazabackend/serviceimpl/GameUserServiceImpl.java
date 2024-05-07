@@ -3,10 +3,13 @@ package com.gamestore.gameplazabackend.serviceimpl;
 import com.gamestore.gameplazabackend.dto.request.AuthenticationRequest;
 import com.gamestore.gameplazabackend.dto.request.RegisterRequest;
 import com.gamestore.gameplazabackend.dto.response.AuthenticationResponse;
+import com.gamestore.gameplazabackend.dto.response.UserProfileResponse;
 import com.gamestore.gameplazabackend.jwt.JwtHelper;
 import com.gamestore.gameplazabackend.model.GameUser;
+import com.gamestore.gameplazabackend.model.UserProfile;
 import com.gamestore.gameplazabackend.repository.IGameUserRepository;
 import com.gamestore.gameplazabackend.service.IGameUserService;
+import com.gamestore.gameplazabackend.service.IUserProfileService;
 import com.gamestore.gameplazabackend.service.IUserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +32,7 @@ import java.util.Optional;
 public class GameUserServiceImpl implements IGameUserService {
 
 
+    private final IUserProfileService userProfileService;
     private final IGameUserRepository gameUserRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -45,12 +49,18 @@ public class GameUserServiceImpl implements IGameUserService {
 
     @Lazy
     @Autowired
-    public GameUserServiceImpl(IGameUserRepository gameUserRepository, PasswordEncoder passwordEncoder, IUserTokenService userTokenService, AuthenticationManager authenticationManager, JwtHelper helper) {
+    public GameUserServiceImpl(IGameUserRepository gameUserRepository,
+                               PasswordEncoder passwordEncoder,
+                               IUserTokenService userTokenService,
+                               AuthenticationManager authenticationManager,
+                               JwtHelper helper,
+                               IUserProfileService userProfileService) {
         this.gameUserRepository = gameUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.userTokenService = userTokenService;
         this.authenticationManager = authenticationManager;
         this.helper = helper;
+        this.userProfileService = userProfileService;
     }
 
 
@@ -59,7 +69,7 @@ public class GameUserServiceImpl implements IGameUserService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<GameUser> optionalGameUser;
         try {
-            optionalGameUser = gameUserRepository.findByUserEmail(email);
+            optionalGameUser = gameUserRepository.findByEmail(email);
         }
         catch(Exception e)
         {
@@ -78,7 +88,7 @@ public class GameUserServiceImpl implements IGameUserService {
     public String register(RegisterRequest request) {
         Optional<GameUser> gameUser;
         try{
-             gameUser = gameUserRepository.findByUserEmail(request.getEmail());
+             gameUser = gameUserRepository.findByEmail(request.getEmail());
         }
         catch (Exception e)
         {
@@ -89,17 +99,24 @@ public class GameUserServiceImpl implements IGameUserService {
                 "An User with Email id:"+request.getEmail()+" already Exists."
         );
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        var user = GameUser.builder()
-                .userName(request.getName())
-                .userEmail(request.getEmail())
-                .userPassword(encodedPassword)
+        GameUser user = GameUser.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(encodedPassword)
                 .isAccountNonExpired(true)
                 .isEnabled(true)
                 .isAccountNonLocked(true)
                 .isCredentialsNonExpired(true)
                 .isAccountNonExpired(true)
                 .build();
+
         var savedUser = gameUserRepository.save(user);
+        UserProfile userProfile = new UserProfile();
+        userProfile.setGameUser(user);
+        userProfile.setProfilePic("default.png");
+        userProfile.setLiveStatus(false);
+        userProfileService.setProfileInfo(userProfile);
+
         return "User registered successfully";
     }
 
@@ -121,6 +138,31 @@ public class GameUserServiceImpl implements IGameUserService {
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Authentication failed " + ex.getMessage());
         }
+    }
+
+    @Override
+    public Boolean isValid(String email) {
+        if(email == null) return false;
+        return gameUserRepository.existsByEmail(email);
+    }
+
+    @Override
+    public GameUser findByEmail(String email) {
+        Optional<GameUser> optionalGameUser;
+        try {
+            optionalGameUser = gameUserRepository.findByEmail(email);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("Error occurs in findBy Email service msg:"+
+                    e.getMessage());
+        }
+        if(optionalGameUser.isEmpty())
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "User With Email:"+email+" Does not exists"
+            );
+        return optionalGameUser.get();
     }
 
     @ExceptionHandler(BadCredentialsException.class)
