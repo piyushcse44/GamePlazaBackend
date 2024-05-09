@@ -13,7 +13,7 @@ public class UserProfileUtil {
         UserProfileResponse userProfileResponse = new UserProfileResponse();
         BeanUtils.copyProperties(userProfile,userProfileResponse);
         if(userProfile.getGameUser().getUsername() !=null)
-            userProfileResponse.setName(userProfile.getGameUser().getUsername());
+            userProfileResponse.setName(userProfile.getGameUser().getName());
         userProfileResponse.setEmail(userProfile.getGameUser().getEmail());
         userProfileResponse.setNumberOfClips(0L);
         if(userProfile.getGameInfoList() !=null)

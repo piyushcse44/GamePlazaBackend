@@ -24,8 +24,6 @@ public class GameUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id",nullable = false, unique = true)
     private Long Id;
-
-
     private String name;
     private String email;
     private String password;

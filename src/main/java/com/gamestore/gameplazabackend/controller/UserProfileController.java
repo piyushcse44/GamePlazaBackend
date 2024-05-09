@@ -20,6 +20,7 @@ public class UserProfileController {
     @GetMapping(path = "/profile/{email}")
     public UserProfileResponse getProfileInfo(String email)
     {
+        UserProfileResponse x = userProfileService.getProfileInfo(email);
         return userProfileService.getProfileInfo(email);
     }
 }
