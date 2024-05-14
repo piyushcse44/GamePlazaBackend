@@ -1,10 +1,14 @@
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\request\ProsRequest.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\repository\IGameInfoRepository.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\model\GameUser.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\serviceimpl\UserProfileServiceImpl.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\controller\GameInfoController.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\controller\ConsController.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\response\GameSpecificationResponse.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\repository\IUserProfileRepository.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\response\UserProfileResponse.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\config\SecurityConfig.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\controller\UserProfileController.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\serviceimpl\GenreServiceImpl.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\repository\IProsRepository.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\model\Pros.java
@@ -15,10 +19,13 @@ E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestor
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\config\JavaConfig.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\config\AppConstants.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\model\GameReview.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\controller\UserTokenController.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\response\GameListResponse.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\response\PagingResponse.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\config\SwaggerConfig.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\service\IUserProfileService.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\request\GameInfoRequest.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\util\UserProfileUtil.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\jwt\JwtAuthenticationEntryPoint.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\request\AuthenticationRequest.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\dto\response\AuthenticationResponse.java
@@ -51,5 +58,6 @@ E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestor
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\repository\IGenreRepository.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\service\IGameUserService.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\model\Genre.java
+E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\model\UserProfile.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\repository\IGameUserRepository.java
 E:\Personal Website\GamePlazaSpring\gameplaza-backend\src\main\java\com\gamestore\gameplazabackend\controller\ImageFetchController.java
